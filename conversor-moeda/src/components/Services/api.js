@@ -1,31 +1,16 @@
-import axios from "axios";
-
 export default async function getCotacao(){
-var url = "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL";
-
-var results = []
-
-await axios.get(url)
-.then(function(response){
-    const data = response.data
-    const ask = data.USD.ask
-    const moeda = data.USD.name
-
-    results = [ask, name]
-    console.log("cotacao do dia")
-    console.log(ask)
-    console.log(name)
-
-    results.push({
+    try {
+        const url = "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL";
+        const response = await fetch(url);
+        const data = await response.json();
         
-    })
-    
+        const cotacaoDolar = parseFloat(data.USDBRL.ask);
+        const cotacaoEuro = parseFloat(data.EURBRL.ask);
+        const cotacaoBitcoin = parseFloat(data.BTCBRL.ask);
 
-
-})
-.cath(function(error){
-    console.log(error)
-})
-
-
+        return [cotacaoDolar, "Cotação atualizada com sucesso!"];
+    } catch (error) {
+        console.error("Erro ao buscar cotação:", error);
+        return [0, "Erro ao conectar com o servidor"];
+    }
 }
